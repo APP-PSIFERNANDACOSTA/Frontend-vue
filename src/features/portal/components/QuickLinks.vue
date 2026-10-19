@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { DollarSign, Dumbbell, FileText, MessageCircle } from '@lucide/vue'
+import { DollarSign, Sprout, FileText, MessageCircle } from '@lucide/vue'
 import { RouterLink } from 'vue-router'
 
 const links = [
-  { name: 'Exercícios', hint: 'Práticas terapêuticas', to: '/portal/exercises', icon: Dumbbell },
+  { name: 'Exercícios', hint: 'Práticas terapêuticas', to: '/portal/exercises', icon: Sprout },
   { name: 'Contratos', hint: 'Meus contratos', to: '/portal/contracts', icon: FileText },
   { name: 'Financeiro', hint: 'Pagamentos', to: '/portal/financial', icon: DollarSign },
   { name: 'Mensagens', hint: 'Recados da psi', to: '/portal/chat', icon: MessageCircle },

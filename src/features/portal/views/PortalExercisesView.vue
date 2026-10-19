@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Clock, Dumbbell } from '@lucide/vue'
+import { Clock, Sprout } from '@lucide/vue'
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { exerciseIcon } from '@/features/exercises/components/ExerciseIcon'
@@ -24,7 +24,7 @@ const meta = (e: Exercise) =>
   <div class="space-y-4">
     <p class="text-sm text-muted-foreground">Práticas recomendadas pela sua psicóloga, como respiração, mindfulness e relaxamento.</p>
     <QueryState :query="query" :empty="exercises.length === 0">
-      <template #empty><EmptyState :icon="Dumbbell" title="Nenhum exercício disponível" description="Sua psicóloga ainda não liberou exercícios para você." /></template>
+      <template #empty><EmptyState :icon="Sprout" title="Nenhum exercício disponível" description="Sua psicóloga ainda não liberou exercícios para você." /></template>
       <article v-for="e in exercises" :key="e.id" class="space-y-3 rounded-2xl border bg-card p-4 shadow-xs">
         <div class="flex items-start gap-3">
           <span class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-brand-50"><component :is="exerciseIcon(e.category)" class="size-6 text-brand-600" /></span>
