@@ -7,6 +7,7 @@ import { ptBR } from 'date-fns/locale'
 import { computed, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import MoodWeekStrip from '@/features/mood/components/MoodWeekStrip.vue'
+import AgendaDoneIllustration from './AgendaDoneIllustration.vue'
 import { useMarkSession } from '@/features/schedule/queries'
 import type { Session } from '@/features/sessions/types'
 import { usePrivacyMode } from '@/shared/composables/usePrivacyMode'
@@ -45,6 +46,10 @@ const awaiting = computed(() => props.sessions.filter((s) => isOpen(s) && end(s)
 const next = computed(() => queue.value[0] ?? null)
 const rest = computed(() => queue.value.slice(1))
 const shown = computed(() => rest.value.slice(0, 3))
+// "Feitas hoje": com o dia 100% concluído mostra a agenda inteira em ordem; antes disso, só as 3 mais recentes
+const FINISHED_MAX = 8
+const finishedList = computed(() => (allDone.value ? finished.value.slice(0, FINISHED_MAX) : [...finished.value].reverse().slice(0, 3)))
+const finishedHidden = computed(() => finished.value.length - finishedList.value.length)
 
 const time = (s: Session) => format(new Date(s.session_date), 'HH:mm')
 const name = (s: Session) => (s.patient?.name ? privacy.name(s.patient.name) : 'Sem paciente')
@@ -104,7 +109,7 @@ const upcomingLabel = computed(() => (props.upcoming ? format(new Date(props.upc
 
         <!-- agenda do dia 100% concluída -->
         <div v-else-if="allDone" class="rounded-2xl border border-brand-200 bg-gradient-to-br from-brand-100 to-brand-50 p-5 text-center">
-          <PartyPopper class="mx-auto mb-2 size-9 text-brand-700" />
+          <AgendaDoneIllustration class="mx-auto mb-1 size-20" />
           <p class="text-lg font-semibold">Parabéns! Você concluiu 100% da sua agenda de hoje</p>
           <p class="mt-1 text-sm text-muted-foreground">
             <strong class="text-foreground">{{ done }}</strong> atendimento{{ done === 1 ? '' : 's' }} realizado{{ done === 1 ? '' : 's' }}<template v-if="done"> · {{ hoursLabel }} de sessão</template><template v-if="missed"> · {{ missed }} falta{{ missed === 1 ? '' : 's' }}</template>
@@ -123,19 +128,20 @@ const upcomingLabel = computed(() => (props.upcoming ? format(new Date(props.upc
         <p v-if="awaiting" class="flex items-center gap-1.5 rounded-lg bg-warning/10 px-3 py-2 text-xs font-medium text-warning"><Clock class="size-3.5 shrink-0" /> {{ awaiting }} sessão(ões) de hoje aguardando registro — <RouterLink to="/dashboard/schedule" class="underline">abrir agenda</RouterLink></p>
 
         <!-- já feitas hoje (realizadas e faltas), mais recentes primeiro -->
-        <div v-if="finished.length && !allDone" class="space-y-1">
-          <p class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Feitas hoje</p>
+        <div v-if="finished.length" class="space-y-1">
+          <p class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{{ allDone ? 'Agenda finalizada' : 'Feitas hoje' }}</p>
           <ul class="divide-y">
-            <li v-for="s in [...finished].reverse().slice(0, 3)" :key="s.id">
+            <li v-for="s in finishedList" :key="s.id">
               <RouterLink :to="`/dashboard/patients/${s.patient_id}`" class="flex items-center gap-3 py-2 text-sm opacity-80 hover:opacity-100">
                 <span class="w-12 shrink-0 tabular-nums text-muted-foreground">{{ time(s) }}</span>
                 <span class="min-w-0 flex-1 truncate">{{ name(s) }}</span>
+                <span v-if="s.duration" class="hidden text-xs text-muted-foreground sm:inline">{{ s.duration }} min</span>
                 <span v-if="s.status === 'completed'" class="inline-flex items-center gap-1 text-xs font-medium text-success"><CheckCircle2 class="size-3.5" /> Realizada</span>
                 <span v-else class="inline-flex items-center gap-1 text-xs font-medium text-warning"><UserX class="size-3.5" /> Falta</span>
               </RouterLink>
             </li>
           </ul>
-          <p v-if="finished.length > 3" class="text-xs text-muted-foreground">+{{ finished.length - 3 }} concluída(s)</p>
+          <p v-if="finishedHidden > 0" class="text-xs text-muted-foreground">+{{ finishedHidden }} concluída(s)</p>
         </div>
 
         <!-- demais sessões do dia (no máximo 3, para o cartão não crescer) -->
