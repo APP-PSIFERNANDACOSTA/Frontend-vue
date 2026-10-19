@@ -1,7 +1,7 @@
 import type { Component } from 'vue'
 import {
   BarChart3, BookOpen, Brain, Cake, Calendar, ClipboardList, DollarSign, FileCheck, FileText, Heart, Home,
-  Library, LayoutDashboard, MessageSquare, NotebookPen, Receipt, Settings, User, Users, Sprout, MessageCircle,
+  Library, LayoutDashboard, MessageSquare, NotebookPen, Receipt, Settings, User, Users, ListChecks, MessageCircle,
 } from '@lucide/vue'
 
 export interface NavItem {
@@ -41,7 +41,7 @@ export const psychologistNavGroups: NavGroup[] = [
     items: [
       { name: 'Diários', to: '/dashboard/diary', icon: BookOpen },
       { name: 'Quizzes', to: '/dashboard/quizzes', icon: Brain },
-      { name: 'Exercícios', to: '/dashboard/exercises', icon: Sprout },
+      { name: 'Exercícios', to: '/dashboard/exercises', icon: ListChecks },
       { name: 'Recursos', to: '/dashboard/resources', icon: Library, hidden: true },
     ],
   },
@@ -74,7 +74,7 @@ export const patientTabs: NavItem[] = [
 /** Itens do menu "Mais" do portal. */
 export const patientMore: NavItem[] = [
   { name: 'Pós-terapia', to: '/portal/post-therapy', icon: NotebookPen },
-  { name: 'Exercícios', to: '/portal/exercises', icon: Sprout },
+  { name: 'Exercícios', to: '/portal/exercises', icon: ListChecks },
   { name: 'Recursos', to: '/portal/resources', icon: BookOpen, hidden: true },
   { name: 'Mensagens', to: '/portal/chat', icon: MessageCircle },
   { name: 'Meus Contratos', to: '/portal/contracts', icon: FileText },
