@@ -7,8 +7,8 @@ export function maskPatientName(value: string | undefined | null, active: boolea
   if (value == null || value === "") return "N/A"
   const name = value.trim()
   if (!active) return name
-  if (name.length <= 3) return `${name}*`
-  return name.slice(0, 3) + "*".repeat(Math.min(name.length - 3, 12))
+  // só a inicial + quantidade fixa de asteriscos (o tamanho do nome não denuncia o paciente)
+  return `${name.charAt(0).toUpperCase()}${"*".repeat(7)}`
 }
 
 const digitsOnly = (s: string) => s.replace(/\D/g, "")
