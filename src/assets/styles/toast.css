@@ -1,0 +1,76 @@
+/*
+ * Notificações (vue-sonner) no padrão do sistema.
+ * Sucesso / info / aviso usam a paleta da marca (brand-*); só o erro é vermelho.
+ * Seletores com .app-toaster para ganhar do CSS da lib sem !important.
+ */
+.app-toaster[data-sonner-toaster] {
+  --toast-accent: var(--brand-400);
+  --toast-icon: var(--brand-700);
+  --toast-bg: color-mix(in oklab, var(--brand-50) 70%, var(--popover));
+  --toast-border: var(--brand-200);
+  --toast-fg: var(--popover-foreground);
+}
+
+.app-toaster [data-sonner-toast][data-styled='true'] {
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--toast-border);
+  border-radius: var(--radius-lg);
+  background: var(--toast-bg);
+  color: var(--toast-fg);
+  /* barra de acento sem quebrar o canto arredondado */
+  box-shadow:
+    inset 4px 0 0 var(--toast-accent),
+    0 8px 24px -8px color-mix(in oklab, var(--brand-primary-dark) 35%, transparent);
+  padding-left: 1.25rem;
+  font-family: var(--font-sans);
+}
+
+.app-toaster [data-sonner-toast] [data-title] {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  color: var(--toast-fg);
+}
+.app-toaster [data-sonner-toast] [data-description] {
+  margin-top: 0.125rem;
+  color: color-mix(in oklab, var(--toast-fg) 72%, transparent);
+  font-size: 0.8125rem;
+  line-height: 1.15rem;
+}
+.app-toaster [data-sonner-toast] [data-icon] {
+  margin: 0.125rem 0 0;
+  color: var(--toast-icon);
+}
+
+/* aviso: acento no rosa escuro da marca */
+.app-toaster [data-sonner-toast][data-styled='true'][data-type='warning'] {
+  --toast-accent: var(--brand-primary-dark);
+}
+.dark .app-toaster [data-sonner-toast][data-styled='true'][data-type='warning'] {
+  --toast-accent: var(--brand-primary);
+}
+.app-toaster [data-sonner-toast][data-type='warning'] [data-icon] {
+  color: var(--brand-primary-dark);
+}
+.dark .app-toaster [data-sonner-toast][data-type='warning'] [data-icon] {
+  color: var(--brand-primary);
+}
+
+/* erro: único em vermelho */
+.app-toaster [data-sonner-toast][data-styled='true'][data-type='error'] {
+  --toast-accent: var(--destructive);
+  border-color: color-mix(in oklab, var(--destructive) 35%, var(--popover));
+  background: color-mix(in oklab, var(--destructive) 8%, var(--popover));
+}
+.app-toaster [data-sonner-toast][data-type='error'] [data-icon],
+.app-toaster [data-sonner-toast][data-type='error'] [data-title] {
+  color: var(--destructive);
+}
+
+.app-toaster [data-sonner-toast] [data-close-button] {
+  border-color: var(--toast-border);
+  background: var(--popover);
+  color: var(--muted-foreground);
+}

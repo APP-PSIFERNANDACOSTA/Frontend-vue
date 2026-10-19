@@ -1,0 +1,48 @@
+{
+  "name": "psi-frontend-vue",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "vite --port 3006",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview --port 3006",
+    "typecheck": "vue-tsc -b"
+  },
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@date-fns/tz": "^1.5.0",
+    "@fontsource/poppins": "^5.3.0",
+    "@internationalized/date": "^3.12.4",
+    "@lucide/vue": "^1.59.0",
+    "@tanstack/vue-query": "^5.104.4",
+    "@vee-validate/zod": "^4.15.1",
+    "@vueuse/core": "^15.0.0",
+    "axios": "^1.20.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.4.0",
+    "dompurify": "^3.4.17",
+    "pinia": "^4.1.0",
+    "quill": "^2.0.3",
+    "reka-ui": "^2.11.0",
+    "tailwind-merge": "^3.7.0",
+    "tw-animate-css": "^1.4.0",
+    "vee-validate": "^4.15.1",
+    "vue": "^3.5.44",
+    "vue-draggable-plus": "^0.6.1",
+    "vue-router": "^5.4.0",
+    "vue-sonner": "^2.0.9",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/dompurify": "^3.0.5",
+    "@types/node": "^26.6.5",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "@vue/tsconfig": "^0.9.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~5.9",
+    "vite": "^8.3.4",
+    "vue-tsc": "^3.3.13"
+  }
+}

@@ -1,0 +1,105 @@
+/*
+ * Paleta do sistema — ÚNICA fonte de cores.
+ * Valores portados 1:1 de frontend/app/globals.css + lib/colors.ts.
+ * As duas cores de marca podem ser sobrescritas em runtime pelo useBranding()
+ * (setando --brand-primary / --brand-primary-dark no :root).
+ */
+:root {
+  /* Marca */
+  --brand-primary: #e8b8d9; /* rosa claro */
+  --brand-primary-dark: #543949; /* rosa escuro */
+
+  /* Escala derivada da marca (substitui pink-50…900 hardcoded) */
+  --brand-50: color-mix(in oklab, var(--brand-primary) 12%, white);
+  --brand-100: color-mix(in oklab, var(--brand-primary) 25%, white);
+  --brand-200: color-mix(in oklab, var(--brand-primary) 50%, white);
+  --brand-300: color-mix(in oklab, var(--brand-primary) 75%, white);
+  --brand-400: var(--brand-primary);
+  --brand-500: color-mix(in oklab, var(--brand-primary) 75%, var(--brand-primary-dark));
+  --brand-600: color-mix(in oklab, var(--brand-primary) 50%, var(--brand-primary-dark));
+  --brand-700: color-mix(in oklab, var(--brand-primary) 25%, var(--brand-primary-dark));
+  --brand-800: var(--brand-primary-dark);
+  --brand-900: color-mix(in oklab, var(--brand-primary-dark) 80%, black);
+
+  /* Status (fixos) */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --info: #3b82f6;
+
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.3 0.02 30);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.3 0.02 30);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.3 0.02 30);
+  --primary: var(--brand-primary);
+  --primary-foreground: var(--brand-primary-dark);
+  --secondary: var(--brand-primary-dark);
+  --secondary-foreground: #ffffff;
+  --muted: oklch(0.96 0.01 355);
+  --muted-foreground: oklch(0.5 0.02 30);
+  --accent: var(--brand-primary);
+  --accent-foreground: var(--brand-primary-dark);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.92 0.01 355);
+  --input: oklch(0.92 0.01 355);
+  --ring: var(--brand-primary);
+  --chart-1: var(--brand-primary);
+  --chart-2: var(--brand-primary-dark);
+  --chart-3: var(--brand-primary);
+  --chart-4: var(--brand-primary-dark);
+  --chart-5: var(--brand-primary);
+  --radius: 0.75rem;
+  --sidebar: oklch(0.99 0 0);
+  --sidebar-foreground: oklch(0.3 0.02 30);
+  --sidebar-primary: var(--brand-primary);
+  --sidebar-primary-foreground: var(--brand-primary-dark);
+  --sidebar-accent: oklch(0.96 0.01 355);
+  --sidebar-accent-foreground: oklch(0.3 0.02 30);
+  --sidebar-border: oklch(0.92 0.01 355);
+  --sidebar-ring: var(--brand-primary);
+}
+
+.dark {
+  --background: oklch(0.2 0.02 30);
+  --foreground: oklch(0.95 0.01 355);
+  --card: oklch(0.25 0.02 30);
+  --card-foreground: oklch(0.95 0.01 355);
+  --popover: oklch(0.25 0.02 30);
+  --popover-foreground: oklch(0.95 0.01 355);
+  --primary: var(--brand-primary-dark);
+  --primary-foreground: #ffffff;
+  --secondary: var(--brand-primary);
+  --secondary-foreground: #ffffff;
+  --muted: oklch(0.3 0.02 30);
+  --muted-foreground: oklch(0.7 0.02 355);
+  --accent: var(--brand-primary-dark);
+  --accent-foreground: #ffffff;
+  --destructive: oklch(0.5 0.2 27);
+  --destructive-foreground: oklch(0.95 0.01 355);
+  --border: oklch(0.3 0.02 30);
+  --input: oklch(0.3 0.02 30);
+  --ring: var(--brand-primary-dark);
+  --chart-1: var(--brand-primary-dark);
+  --chart-2: var(--brand-primary);
+  --chart-3: var(--brand-primary-dark);
+  --chart-4: var(--brand-primary);
+  --chart-5: var(--brand-primary-dark);
+  --sidebar: oklch(0.18 0.02 30);
+  --sidebar-foreground: oklch(0.95 0.01 355);
+  --sidebar-primary: var(--brand-primary-dark);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: oklch(0.3 0.02 30);
+  --sidebar-accent-foreground: oklch(0.95 0.01 355);
+  --sidebar-border: oklch(0.3 0.02 30);
+  --sidebar-ring: var(--brand-primary-dark);
+
+  /* Escala da marca no escuro: tons claros viram fundos escuros sutis */
+  --brand-50: color-mix(in oklab, var(--brand-primary-dark) 25%, var(--background));
+  --brand-100: color-mix(in oklab, var(--brand-primary-dark) 45%, var(--background));
+  --brand-200: color-mix(in oklab, var(--brand-primary-dark) 70%, var(--background));
+  --brand-300: var(--brand-primary-dark);
+  --brand-600: color-mix(in oklab, var(--brand-primary) 85%, white);
+  --brand-700: color-mix(in oklab, var(--brand-primary) 70%, white);
+}

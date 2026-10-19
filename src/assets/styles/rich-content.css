@@ -1,0 +1,41 @@
+/* Conteúdo HTML gerado pelo editor rico (Quill) — leitura e edição, claro/escuro. */
+.rich-content {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  word-break: break-word;
+}
+.rich-content > * + * { margin-top: 0.75em; }
+.rich-content h1 { font-size: 1.5rem; font-weight: 600; }
+.rich-content h2 { font-size: 1.25rem; font-weight: 600; }
+.rich-content h3 { font-size: 1.1rem; font-weight: 600; }
+.rich-content ul, .rich-content ol { padding-left: 1.5rem; }
+.rich-content ul { list-style: disc; }
+.rich-content ol { list-style: decimal; }
+.rich-content a { color: var(--brand-700); text-decoration: underline; }
+.dark .rich-content a { color: var(--brand-primary); }
+.rich-content blockquote { border-left: 3px solid var(--brand-300); padding-left: 1rem; color: var(--muted-foreground); }
+.rich-content .ql-align-center { text-align: center; }
+.rich-content .ql-align-right { text-align: right; }
+.rich-content .ql-align-justify { text-align: justify; }
+.rich-content .ql-indent-1 { padding-left: 3em; }
+.rich-content .ql-indent-2 { padding-left: 6em; }
+.rich-content .ql-indent-3 { padding-left: 9em; }
+
+/* Quill snow com os tokens do sistema */
+.rich-editor .ql-toolbar.ql-snow {
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--muted);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+.rich-editor .ql-container.ql-snow { border: 0; font-family: var(--font-sans); font-size: 0.9375rem; }
+.rich-editor .ql-editor { min-height: 260px; color: var(--foreground); }
+.rich-editor .ql-editor.ql-blank::before { color: var(--muted-foreground); font-style: normal; }
+.rich-editor .ql-snow .ql-stroke { stroke: var(--foreground); }
+.rich-editor .ql-snow .ql-fill { fill: var(--foreground); }
+.rich-editor .ql-snow .ql-picker { color: var(--foreground); }
+.rich-editor .ql-snow .ql-picker-options { background: var(--popover); border-color: var(--border); color: var(--popover-foreground); }
+.rich-editor .ql-snow.ql-toolbar button:hover .ql-stroke,
+.rich-editor .ql-snow.ql-toolbar button.ql-active .ql-stroke { stroke: var(--brand-600); }
+.rich-editor .ql-snow.ql-toolbar button:hover .ql-fill,
+.rich-editor .ql-snow.ql-toolbar button.ql-active .ql-fill { fill: var(--brand-600); }
