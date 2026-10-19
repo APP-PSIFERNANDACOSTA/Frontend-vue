@@ -3,6 +3,7 @@
 import { Loader2, Save } from '@lucide/vue'
 import { reactive, ref, watch } from 'vue'
 import FormField from '@/shared/components/FormField.vue'
+import MoneyInput from '@/shared/components/MoneyInput.vue'
 import { Button } from '@/shared/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
 import { Input } from '@/shared/ui/input'
@@ -56,7 +57,7 @@ watch(
       emergency_contact: p.emergency_contact || '',
       address: p.address || '',
       insurance: p.insurance || '',
-      price_session: p.price_session ?? undefined,
+      price_session: p.price_session == null ? undefined : Number(p.price_session),
       payment_type: p.payment_type || 'por_sessao',
       initial_notes: p.initial_notes || '',
       status: p.status,
@@ -69,7 +70,6 @@ watch(
   { immediate: true },
 )
 
-const onPrice = (v: string | number) => (form.price_session = v === '' ? undefined : Number(v))
 </script>
 
 <template>
@@ -112,16 +112,7 @@ const onPrice = (v: string | number) => (form.price_session = v === '' ? undefin
             <Input :id="id" v-model="form.insurance" placeholder="Ex: Unimed, Amil..." />
           </FormField>
           <FormField v-slot="{ id }" label="Valor da sessão (R$)">
-            <Input
-              :id="id"
-              :model-value="form.price_session ?? ''"
-              type="number"
-              inputmode="decimal"
-              step="0.01"
-              min="0"
-              placeholder="150.00"
-              @update:model-value="onPrice"
-            />
+            <MoneyInput :id="id" v-model="form.price_session" placeholder="150,00" />
           </FormField>
           <FormField label="Tipo de pagamento">
             <Select v-model="form.payment_type">

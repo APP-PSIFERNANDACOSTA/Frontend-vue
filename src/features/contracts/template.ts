@@ -5,7 +5,7 @@ import type { Contract, ContractPaymentType } from './types'
  * Só para a tela de criação — o texto oficial salvo no contrato vem sempre do servidor.
  */
 export function buildContractPreview(paymentType: ContractPaymentType, price: number, forExistingPatient: boolean): string {
-  const brl = price.toFixed(2).replace('.', ',')
+  const brl = price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
   const payment =
     paymentType === 'por_sessao'
       ? 'deve ser realizado até 30 minutos antes do horário de cada sessão'

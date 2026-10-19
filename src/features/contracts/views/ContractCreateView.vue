@@ -6,6 +6,7 @@ import { paymentTypeLabel } from '@/features/patients/constants'
 import PatientSelect from '@/features/patients/components/PatientSelect.vue'
 import { useActivePatients } from '@/features/patients/queries'
 import FormField from '@/shared/components/FormField.vue'
+import MoneyInput from '@/shared/components/MoneyInput.vue'
 import PageHeader from '@/shared/components/PageHeader.vue'
 import SectionCard from '@/shared/components/SectionCard.vue'
 import { useClipboardToast } from '@/shared/composables/useClipboardToast'
@@ -93,7 +94,7 @@ function reset() {
                 <SelectContent><SelectItem v-for="t in CONTRACT_PAYMENT_TYPES" :key="t.value" :value="t.value">{{ t.label }}</SelectItem></SelectContent>
               </Select>
             </FormField>
-            <FormField v-slot="{ id }" label="Valor da sessão (R$)" required><Input :id="id" v-model.number="form.price" type="number" inputmode="decimal" step="0.01" min="0.01" required placeholder="0,00" /></FormField>
+            <FormField v-slot="{ id }" label="Valor da sessão (R$)" required><MoneyInput :id="id" v-model="form.price" required /></FormField>
             <FormField v-slot="{ id }" label="Descrição interna (opcional)" hint="Só você vê este texto."><Input :id="id" v-model="form.internal_description" placeholder="Ex.: Renovação de março" /></FormField>
             <Button type="submit" class="w-full sm:w-auto" :disabled="create.isPending.value"><Loader2 v-if="create.isPending.value" class="animate-spin" /><UserPlus v-else /> {{ create.isPending.value ? 'Gerando...' : 'Gerar contrato' }}</Button>
           </CardContent>

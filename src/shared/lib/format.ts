@@ -42,3 +42,13 @@ export function initials(name: string | null | undefined): string {
 export function firstName(name: string | null | undefined): string {
   return name?.trim().split(/\s+/)[0] ?? ''
 }
+
+/** Converte texto digitado em reais ("100", "100,50", "1.000,50", "100.50") para número. */
+export function parseMoneyBr(raw: string): number | undefined {
+  let s = raw.replace(/[R$\s]/g, '')
+  if (!s) return undefined
+  if (s.includes(',')) s = s.replace(/\./g, '').replace(',', '.')
+  else if (/^\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, '') // "1.000" = mil
+  const n = Number(s)
+  return Number.isFinite(n) ? Math.round(n * 100) / 100 : undefined
+}

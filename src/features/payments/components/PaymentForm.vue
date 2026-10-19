@@ -4,6 +4,7 @@ import { DollarSign, Loader2, Save } from '@lucide/vue'
 import { reactive, watch } from 'vue'
 import PatientSelect from '@/features/patients/components/PatientSelect.vue'
 import FormField from '@/shared/components/FormField.vue'
+import MoneyInput from '@/shared/components/MoneyInput.vue'
 import { usePrivacyMode } from '@/shared/composables/usePrivacyMode'
 import { notify } from '@/shared/lib/toast'
 import { Button } from '@/shared/ui/button'
@@ -59,7 +60,7 @@ function submit() {
 
         <div class="grid gap-4 md:grid-cols-2">
           <FormField v-slot="{ id }" label="Valor (R$)" required>
-            <Input :id="id" v-model.number="form.amount" type="number" inputmode="decimal" step="0.01" min="0.01" placeholder="0,00" required />
+            <MoneyInput :id="id" v-model="form.amount" required />
           </FormField>
           <FormField v-slot="{ id }" label="Data do pagamento" required>
             <Input :id="id" v-model="form.payment_date" type="date" required />

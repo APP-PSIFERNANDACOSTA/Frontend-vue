@@ -2,6 +2,7 @@
 import { Loader2, Save } from '@lucide/vue'
 import { reactive, watch } from 'vue'
 import FormField from '@/shared/components/FormField.vue'
+import MoneyInput from '@/shared/components/MoneyInput.vue'
 import { Button } from '@/shared/ui/button'
 import { Card, CardContent } from '@/shared/ui/card'
 import { Input } from '@/shared/ui/input'
@@ -28,7 +29,7 @@ const submit = () => emit('submit', { title: form.title, description: form.descr
         <FormField v-slot="{ id }" label="Título do custo" required><Input :id="id" v-model="form.title" required placeholder="Ex.: Aluguel da sala" /></FormField>
         <FormField v-slot="{ id }" label="Descrição do custo" required><Input :id="id" v-model="form.description" required placeholder="Detalhes do lançamento" /></FormField>
         <div class="grid gap-4 md:grid-cols-3">
-          <FormField v-slot="{ id }" label="Valor (R$)" required><Input :id="id" v-model.number="form.amount" type="number" inputmode="decimal" step="0.01" min="0.01" required placeholder="0,00" /></FormField>
+          <FormField v-slot="{ id }" label="Valor (R$)" required><MoneyInput :id="id" v-model="form.amount" required /></FormField>
           <FormField v-slot="{ id }" label="Data da saída" required><Input :id="id" v-model="form.payment_date" type="date" required /></FormField>
           <FormField label="Forma de pagamento">
             <Select v-model="form.payment_method">

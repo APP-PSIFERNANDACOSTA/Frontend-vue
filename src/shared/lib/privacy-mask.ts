@@ -44,7 +44,7 @@ export function maskMoneyBr(value: number | string | null | undefined, active: b
   if (!active) {
     const n = typeof value === "string" ? parseFloat(value) : Number(value)
     if (value === null || value === undefined || value === "" || Number.isNaN(n)) return ""
-    return `R$ ${n.toFixed(2)}`
+    return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
   }
   return "R$ •••"
 }
