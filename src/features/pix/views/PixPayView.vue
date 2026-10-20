@@ -4,7 +4,7 @@ import { Lock, SearchX } from '@lucide/vue'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import LoadingState from '@/shared/components/LoadingState.vue'
-import { formatMoney } from '@/shared/lib/format'
+import { formatDate, formatMoney } from '@/shared/lib/format'
 import PixPaymentPanel from '../components/PixPaymentPanel.vue'
 import { usePublicPixCharge, useRenewPixCharge } from '../queries'
 
@@ -36,14 +36,15 @@ const data = computed(() => charge.data.value)
           <p class="font-semibold">{{ data.psychologist.name }}<span v-if="data.psychologist.crp" class="font-normal text-muted-foreground"> · CRP {{ data.psychologist.crp }}</span></p>
           <p class="mt-3 text-4xl font-bold tabular-nums text-brand-800 dark:text-brand">{{ formatMoney(data.amount) }}</p>
           <p class="text-sm text-muted-foreground">{{ data.description }}</p>
+          <p v-if="data.status === 'pending' && data.due_date" :class="['mt-1 text-xs', data.overdue ? 'font-medium text-destructive' : 'text-muted-foreground']">{{ data.overdue ? 'Venceu em' : 'Vence em' }} {{ formatDate(data.due_date) }}</p>
         </div>
         <PixPaymentPanel
-          :charge="data" hide-header :refreshing="charge.isFetching.value" :renewing="renew.isPending.value"
+          :charge="data" hide-header hide-footer :refreshing="charge.isFetching.value" :renewing="renew.isPending.value"
           @refresh="charge.refetch()" @renew="renew.mutate(token)"
         />
       </main>
 
-      <p class="mt-6 flex items-center justify-center gap-1.5 text-xs text-muted-foreground"><Lock class="size-3.5" /> Pagamento processado com segurança pelo Mercado Pago</p>
+      <p class="mt-6 flex items-center justify-center gap-1.5 text-xs text-muted-foreground"><Lock class="size-3.5" /> Pagamento processado com segurança</p>
     </div>
   </div>
 </template>

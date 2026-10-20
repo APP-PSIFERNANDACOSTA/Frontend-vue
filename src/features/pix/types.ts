@@ -85,6 +85,8 @@ export interface PublicPixCharge {
   overdue: boolean
   /** false quando não foi possível gerar o Pix agora (Mercado Pago fora/sem configuração) */
   pix_available?: boolean
+  /** QR de demonstração (seeder local) — não é um Pix pagável */
+  demo?: boolean
   patient_first_name: string | null
   psychologist: { name: string | null; crp: string | null }
 }
@@ -95,6 +97,8 @@ export type PayableCharge = Pick<PublicPixCharge, 'amount' | 'description' | 'st
   due_date?: string | null
   overdue?: boolean
   pix_available?: boolean
+  demo?: boolean
+  provider?: string
 }
 
 export interface MercadoPagoSettingsData {

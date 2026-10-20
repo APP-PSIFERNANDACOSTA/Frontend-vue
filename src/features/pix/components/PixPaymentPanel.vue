@@ -3,7 +3,7 @@
  * Mostra uma cobrança Pix para pagar: valor, QR Code, copia e cola, validade e status ao vivo.
  * Mesmo componente no link público, no portal do paciente e no modal da psicóloga.
  */
-import { CheckCircle2, CloudOff, Copy, Loader2, RefreshCw, TimerOff } from '@lucide/vue'
+import { CheckCircle2, CloudOff, Copy, FlaskConical, Loader2, Lock, RefreshCw, TimerOff } from '@lucide/vue'
 import { useIntervalFn } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { useClipboardToast } from '@/shared/composables/useClipboardToast'
@@ -12,7 +12,7 @@ import { Button } from '@/shared/ui/button'
 import { PIX_STATUS } from '../status'
 import type { PayableCharge } from '../types'
 
-const props = defineProps<{ charge: PayableCharge; refreshing?: boolean; renewing?: boolean; hideHeader?: boolean }>()
+const props = defineProps<{ charge: PayableCharge; refreshing?: boolean; renewing?: boolean; hideHeader?: boolean; hideFooter?: boolean }>()
 defineEmits<{ refresh: []; renew: [] }>()
 const { copy } = useClipboardToast()
 
@@ -29,6 +29,7 @@ const expiresIn = computed(() => {
 const qrSrc = computed(() => (props.charge.qr_code_base64 ? `data:image/png;base64,${props.charge.qr_code_base64}` : ''))
 const paidAt = computed(() => (props.charge.paid_at ? new Date(props.charge.paid_at).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : ''))
 const st = computed(() => PIX_STATUS[props.charge.status])
+const isDemo = computed(() => !!props.charge.demo || props.charge.provider === 'demo')
 </script>
 
 <template>
@@ -58,6 +59,7 @@ const st = computed(() => PIX_STATUS[props.charge.status])
 
     <!-- aguardando -->
     <template v-else-if="charge.status === 'pending'">
+      <p v-if="isDemo" class="mx-auto flex w-fit items-center gap-1.5 rounded-full bg-warning/15 px-3 py-1 text-xs font-medium text-warning"><FlaskConical class="size-3.5" /> Demonstração · não pague este código</p>
       <img v-if="qrSrc" :src="qrSrc" alt="QR Code Pix" class="mx-auto size-56 rounded-xl border bg-white p-2" />
       <div v-if="charge.qr_code" class="space-y-1.5 text-left">
         <p class="text-xs font-medium text-muted-foreground">Pix copia e cola</p>
@@ -93,5 +95,7 @@ const st = computed(() => PIX_STATUS[props.charge.status])
     </div>
 
     <p v-else class="rounded-xl bg-muted p-4 text-sm text-muted-foreground">Esta cobrança foi {{ st.label.toLowerCase() }} e não pode mais ser paga.</p>
+
+    <p v-if="!hideFooter" class="flex items-center justify-center gap-1.5 pt-1 text-xs text-muted-foreground"><Lock class="size-3.5" /> Pagamento processado com segurança</p>
   </div>
 </template>
