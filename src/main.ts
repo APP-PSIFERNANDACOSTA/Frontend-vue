@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
+import { VueQueryPlugin } from '@tanstack/vue-query'
 import '@fontsource/poppins/300.css'
 import '@fontsource/poppins/400.css'
 import '@fontsource/poppins/500.css'
@@ -14,6 +14,7 @@ import { useAuthStore } from './features/auth/store'
 import { useBranding } from './shared/composables/useBranding'
 import { useTheme } from './shared/composables/useTheme'
 import apiClient from './shared/lib/api-client'
+import { queryClient } from './shared/lib/query-client'
 import { registerServiceWorker } from './app/pwa'
 import { initPwaInstall } from './shared/composables/usePwaInstall'
 
@@ -21,12 +22,6 @@ const app = createApp(App)
 const pinia = createPinia()
 app.use(pinia)
 
-// Refetch ao voltar para a aba + a cada minuto enquanto visível (substitui use-auto-refresh)
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: { staleTime: 30_000, refetchOnWindowFocus: true, retry: 1 },
-  },
-})
 app.use(VueQueryPlugin, { queryClient })
 app.use(router)
 
@@ -35,8 +30,7 @@ useTheme()
 
 // 401 em qualquer request → limpa sessão e volta ao login
 apiClient.setUnauthorizedHandler(() => {
-  useAuthStore(pinia).clearSession()
-  queryClient.clear()
+  useAuthStore(pinia).clearSession() // também limpa o cache das telas
   if (router.currentRoute.value.meta.requiresAuth) router.replace('/')
 })
 

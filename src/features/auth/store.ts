@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { queryClient } from '@/shared/lib/query-client'
 import { computed, ref } from 'vue'
 import authApi from './api'
 import type { LoginCredentials, RegisterData, User, UserRole } from './types'
@@ -37,6 +38,7 @@ export const useAuthStore = defineStore('auth', () => {
         } catch {
           /* storage indisponível */
         }
+        queryClient.clear() // nada do usuário anterior (mesmo navegador) pode aparecer
         user.value = response.user
         return { success: true as const, user: response.user }
       }
@@ -51,6 +53,7 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const response = await authApi.register(data)
       if (response.success && response.user) {
+        queryClient.clear()
         user.value = response.user
         return { success: true as const, user: response.user }
       }
@@ -61,14 +64,18 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function logout() {
-    await authApi.logout()
-    clearSession()
+    try {
+      await authApi.logout()
+    } finally {
+      clearSession() // mesmo sem rede, nada do usuário fica na tela
+    }
   }
 
   /** Limpa o estado local (usado também no 401 global). */
   function clearSession() {
     user.value = null
     initPromise = null
+    queryClient.clear()
     try {
       sessionStorage.removeItem('mood-checkin-dismissed') // novo login → o "Como você está hoje?" volta a aparecer
     } catch {
