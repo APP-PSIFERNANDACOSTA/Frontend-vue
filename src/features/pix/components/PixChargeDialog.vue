@@ -78,6 +78,22 @@ async function renew() {
   }
 }
 
+// cobrança da agenda ainda sem QR: gera ao abrir (o mesmo que acontece quando o paciente abre o link)
+const generating = ref(false)
+watch(() => current.value && current.value.status === 'pending' && !current.value.qr_code ? current.value.token : null, async (token) => {
+  if (!token || generating.value) return
+  generating.value = true
+  try {
+    const pub = await pixApi.publicGet(token)
+    if (!pub.pix_available) notify.error('Pix indisponível', 'Não foi possível gerar o QR agora. Confira o Mercado Pago em Integrações.')
+    await qc.invalidateQueries({ queryKey: pixKeys.one(current.value!.id) })
+  } catch {
+    notify.error('Pix indisponível', 'Não foi possível gerar o QR agora.')
+  } finally {
+    generating.value = false
+  }
+}, { immediate: true })
+
 const link = computed(() => (current.value ? pixPaymentLink(current.value.token) : ''))
 const whatsapp = computed(() => (current.value ? whatsappPixLink(patient.value?.phone, patient.value?.name, current.value.amount, link.value) : ''))
 </script>

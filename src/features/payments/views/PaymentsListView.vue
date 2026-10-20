@@ -2,7 +2,7 @@
 import { DollarSign, Plus } from '@lucide/vue'
 import { useStorage } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import DataView from '@/shared/components/data/DataView.vue'
 import FilterBar from '@/shared/components/data/FilterBar.vue'
 import ViewToggle from '@/shared/components/data/ViewToggle.vue'
@@ -27,7 +27,7 @@ const router = useRouter()
 const privacy = usePrivacyMode()
 const confirm = useConfirm()
 
-const search = ref('')
+const search = ref(String(useRoute().query.q ?? '')) // ?q= vem do perfil do paciente ("Ver todos")
 const method = ref('all')
 const view = useStorage<ViewMode>('payments-listing-view', 'cards')
 

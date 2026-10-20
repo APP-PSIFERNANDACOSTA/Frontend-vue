@@ -23,6 +23,7 @@ export interface PatientFormValues {
   insurance: string
   price_session?: number
   payment_type: PaymentType
+  payment_day: number | null
   initial_notes: string
   status: 'active' | 'inactive'
   /** ISO UTC (convertido do horário de Brasília digitado) ou null */
@@ -39,7 +40,7 @@ const emit = defineEmits<{ submit: [values: PatientFormValues]; cancel: [] }>()
 
 const empty = (): Omit<PatientFormValues, 'first_session_at'> => ({
   name: '', email: '', phone: '', cpf: '', birthdate: '', emergency_contact: '', address: '',
-  insurance: '', price_session: undefined, payment_type: 'por_sessao', initial_notes: '', status: 'active',
+  insurance: '', price_session: undefined, payment_type: 'por_sessao', payment_day: null, initial_notes: '', status: 'active',
 })
 const form = reactive(empty())
 const firstSession = ref('') // datetime-local, horário de Brasília
@@ -59,6 +60,7 @@ watch(
       insurance: p.insurance || '',
       price_session: p.price_session == null ? undefined : Number(p.price_session),
       payment_type: p.payment_type || 'por_sessao',
+      payment_day: p.payment_day ?? null,
       initial_notes: p.initial_notes || '',
       status: p.status,
     })
@@ -119,6 +121,14 @@ watch(
               <SelectTrigger class="w-full"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem v-for="t in PAYMENT_TYPES" :key="t.value" :value="t.value">{{ t.label }}</SelectItem>
+              </SelectContent>
+            </Select>
+          </FormField>
+          <FormField v-if="form.payment_type !== 'por_sessao'" label="Dia de pagamento" :hint="form.payment_type === 'quinzenal' ? 'Duas cobranças: neste dia e 15 dias depois' : 'A mensalidade vence neste dia'">
+            <Select :model-value="form.payment_day ? String(form.payment_day) : undefined" @update:model-value="(v) => (form.payment_day = v ? Number(v) : null)">
+              <SelectTrigger class="w-full"><SelectValue placeholder="Escolha o dia" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem v-for="d in [5, 10, 15, 20]" :key="d" :value="String(d)">Todo dia {{ d }}</SelectItem>
               </SelectContent>
             </Select>
           </FormField>

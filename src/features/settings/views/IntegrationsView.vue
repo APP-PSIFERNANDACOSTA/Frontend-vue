@@ -2,6 +2,7 @@
 import { Calendar, CheckCircle2, Loader2, XCircle } from '@lucide/vue'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import BillingSettingsCard from '@/features/pix/components/BillingSettingsCard.vue'
 import MercadoPagoIntegrationCard from '@/features/pix/components/MercadoPagoIntegrationCard.vue'
 import PageHeader from '@/shared/components/PageHeader.vue'
 import SectionCard from '@/shared/components/SectionCard.vue'
@@ -73,5 +74,7 @@ async function remove() {
     </SectionCard>
 
     <MercadoPagoIntegrationCard />
+
+    <BillingSettingsCard />
   </div>
 </template>

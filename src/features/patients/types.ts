@@ -23,6 +23,8 @@ export interface Patient {
   insurance: string | null;
   price_session: number | null;
   payment_type: PaymentType;
+  /** dia do mês escolhido para pagar (mensal/quinzenal) */
+  payment_day?: number | null;
   initial_notes: string | null;
   status: "active" | "inactive";
   last_session_date: string | null;
@@ -57,6 +59,7 @@ export interface CreatePatientData {
   insurance?: string;
   price_session?: number;
   payment_type?: PaymentType;
+  payment_day?: number | null;
   initial_notes?: string;
   status?: "active" | "inactive";
 }
@@ -73,6 +76,7 @@ export interface UpdatePatientData {
   insurance?: string;
   price_session?: number;
   payment_type?: PaymentType;
+  payment_day?: number | null;
   initial_notes?: string;
   status?: "active" | "inactive";
   last_session_date?: string;

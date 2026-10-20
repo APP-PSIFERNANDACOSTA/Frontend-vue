@@ -3,11 +3,11 @@
  * Mostra uma cobrança Pix para pagar: valor, QR Code, copia e cola, validade e status ao vivo.
  * Mesmo componente no link público, no portal do paciente e no modal da psicóloga.
  */
-import { CheckCircle2, Copy, Loader2, RefreshCw, TimerOff } from '@lucide/vue'
+import { CheckCircle2, CloudOff, Copy, Loader2, RefreshCw, TimerOff } from '@lucide/vue'
 import { useIntervalFn } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { useClipboardToast } from '@/shared/composables/useClipboardToast'
-import { formatMoney } from '@/shared/lib/format'
+import { formatDate, formatMoney } from '@/shared/lib/format'
 import { Button } from '@/shared/ui/button'
 import { PIX_STATUS } from '../status'
 import type { PayableCharge } from '../types'
@@ -36,13 +36,28 @@ const st = computed(() => PIX_STATUS[props.charge.status])
     <div v-if="!hideHeader">
       <p class="text-3xl font-bold tabular-nums">{{ formatMoney(charge.amount) }}</p>
       <p class="text-sm text-muted-foreground">{{ charge.description }}</p>
+      <p v-if="charge.status === 'pending' && charge.due_date" :class="['text-xs', charge.overdue ? 'font-medium text-destructive' : 'text-muted-foreground']">{{ charge.overdue ? 'Venceu em' : 'Vence em' }} {{ formatDate(charge.due_date) }}</p>
       <span :class="['mt-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium', st.class]">
         <Loader2 v-if="charge.status === 'pending'" class="size-3 animate-spin" />{{ st.label }}
       </span>
     </div>
 
+    <!-- em aberto, mas o Pix não pôde ser gerado agora -->
+    <div v-if="charge.status === 'pending' && !charge.qr_code" class="space-y-2 rounded-2xl border border-dashed p-5">
+      <template v-if="charge.pix_available === false">
+        <CloudOff class="mx-auto size-9 text-muted-foreground" />
+        <p class="font-medium">O Pix não está disponível agora</p>
+        <p class="text-sm text-muted-foreground">Tente novamente em alguns minutos ou fale com sua psicóloga.</p>
+        <Button variant="outline" size="sm" :disabled="refreshing" @click="$emit('refresh')"><RefreshCw :class="refreshing && 'animate-spin'" /> Tentar de novo</Button>
+      </template>
+      <template v-else>
+        <Loader2 class="mx-auto size-7 animate-spin text-muted-foreground" />
+        <p class="text-sm text-muted-foreground">Gerando o código Pix…</p>
+      </template>
+    </div>
+
     <!-- aguardando -->
-    <template v-if="charge.status === 'pending'">
+    <template v-else-if="charge.status === 'pending'">
       <img v-if="qrSrc" :src="qrSrc" alt="QR Code Pix" class="mx-auto size-56 rounded-xl border bg-white p-2" />
       <div v-if="charge.qr_code" class="space-y-1.5 text-left">
         <p class="text-xs font-medium text-muted-foreground">Pix copia e cola</p>

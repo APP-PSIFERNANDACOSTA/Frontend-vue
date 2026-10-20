@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, type Ref } from 'vue'
 import { useApiMutation } from '@/shared/composables/useApiMutation'
 import { pixApi } from './api'
-import type { CreatePixChargeData, MercadoPagoSettingsData, MercadoPagoStatus, PixCharge, PublicPixCharge } from './types'
+import type { CreatePixChargeData, ManualPaymentMethod, MercadoPagoSettingsData, MercadoPagoStatus, PixCharge, PublicPixCharge } from './types'
 
 export const pixKeys = {
   status: ['mercadopago', 'status'] as const,
@@ -10,13 +10,14 @@ export const pixKeys = {
   one: (id: number) => ['pix-charges', id] as const,
   public: (token: string) => ['pix-public', token] as const,
   mine: ['pix-charges', 'mine'] as const,
+  billing: ['billing', 'settings'] as const,
 }
 
 export function useMercadoPagoStatus() {
   return useQuery({ queryKey: pixKeys.status, queryFn: pixApi.status, staleTime: 60_000 })
 }
 
-export function usePixCharges(params: Ref<{ status?: PixCharge['status']; patient_id?: number }> = computed(() => ({}))) {
+export function usePixCharges(params: Ref<{ status?: PixCharge['status']; patient_id?: number; per_page?: number }> = computed(() => ({}))) {
   return useQuery({ queryKey: computed(() => [...pixKeys.all, 'list', params.value]), queryFn: () => pixApi.list(params.value) })
 }
 
@@ -88,5 +89,28 @@ export function useDeleteMercadoPagoSettings() {
     success: 'Credenciais removidas',
     error: 'Não foi possível remover',
     onSuccess: (s: MercadoPagoStatus) => qc.setQueryData(pixKeys.status, s),
+  })
+}
+
+export function useUpdatePixCharge() {
+  return useApiMutation(({ id, ...data }: { id: number; amount?: number; due_date?: string | null; description?: string }) => pixApi.update(id, data), {
+    success: 'Cobrança atualizada', error: 'Erro ao atualizar', invalidate: [pixKeys.all],
+  })
+}
+
+export function useMarkPixChargePaid() {
+  return useApiMutation(({ id, ...data }: { id: number; payment_method: ManualPaymentMethod; payment_date: string }) => pixApi.markPaid(id, data), {
+    success: 'Pagamento registrado', error: 'Erro ao registrar pagamento', invalidate: [pixKeys.all, ['payments']],
+  })
+}
+
+export function useBillingSettings() {
+  return useQuery({ queryKey: pixKeys.billing, queryFn: pixApi.billingSettings })
+}
+
+export function useSaveBillingSettings() {
+  return useApiMutation((data: { enabled: boolean; start?: 'today' | 'next_month' }) => pixApi.saveBillingSettings(data), {
+    success: (s) => (s.enabled ? 'Cobranças automáticas ligadas' : 'Cobranças automáticas desligadas'),
+    error: 'Não foi possível salvar', invalidate: [pixKeys.billing, pixKeys.all],
   })
 }

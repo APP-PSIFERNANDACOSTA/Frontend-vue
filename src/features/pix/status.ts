@@ -8,3 +8,10 @@ export const PIX_STATUS: Record<PixChargeStatus, { label: string; class: string 
   rejected: { label: 'Recusado', class: 'bg-destructive/10 text-destructive' },
   refunded: { label: 'Estornado', class: 'bg-info/10 text-info' },
 }
+
+export const PIX_KIND_LABEL: Record<string, string> = {
+  manual: 'Avulsa',
+  session: 'Por sessão',
+  monthly: 'Mensalidade',
+  biweekly: 'Quinzena',
+}

@@ -1,4 +1,6 @@
 export type PixChargeStatus = 'pending' | 'paid' | 'expired' | 'cancelled' | 'rejected' | 'refunded'
+/** manual = avulsa; as outras nascem da agenda conforme a forma de pagamento do paciente */
+export type PixChargeKind = 'manual' | 'session' | 'monthly' | 'biweekly'
 
 export interface PixCharge {
   id: number
@@ -11,6 +13,16 @@ export interface PixCharge {
   psychologist_id: number
   patient_id: number | null
   payment_id: number | null
+  kind: PixChargeKind
+  session_id: number | null
+  period_start: string | null
+  period_end: string | null
+  /** vencimento (YYYY-MM-DD) */
+  due_date: string | null
+  sessions_count: number | null
+  /** editada/cancelada à mão: a agenda não altera mais */
+  locked: boolean
+  overdue: boolean
   amount: string
   description: string
   status: PixChargeStatus
@@ -69,12 +81,21 @@ export interface PublicPixCharge {
   paid_at: string | null
   created_at: string | null
   can_renew: boolean
+  due_date: string | null
+  overdue: boolean
+  /** false quando não foi possível gerar o Pix agora (Mercado Pago fora/sem configuração) */
+  pix_available?: boolean
   patient_first_name: string | null
   psychologist: { name: string | null; crp: string | null }
 }
 
 /** Campos que o painel de pagamento precisa (serve para as duas formas acima). */
-export type PayableCharge = Pick<PublicPixCharge, 'amount' | 'description' | 'status' | 'qr_code' | 'expires_at' | 'paid_at' | 'can_renew'> & { qr_code_base64?: string | null }
+export type PayableCharge = Pick<PublicPixCharge, 'amount' | 'description' | 'status' | 'qr_code' | 'expires_at' | 'paid_at' | 'can_renew'> & {
+  qr_code_base64?: string | null
+  due_date?: string | null
+  overdue?: boolean
+  pix_available?: boolean
+}
 
 export interface MercadoPagoSettingsData {
   access_token?: string
@@ -82,3 +103,14 @@ export interface MercadoPagoSettingsData {
   /** "" remove */
   webhook_secret?: string
 }
+
+export interface BillingSettings {
+  enabled: boolean
+  starts_on: string | null
+  open_total: number
+  open_count: number
+  patients_without_price: number
+  monthly_without_day: number
+}
+
+export type ManualPaymentMethod = 'pix' | 'credit_card' | 'boleto'

@@ -36,7 +36,7 @@ watch(() => charge.data.value?.status, (s, prev) => {
       <div class="min-w-0 flex-1">
         <p class="text-lg font-bold tabular-nums">{{ formatMoney(c.amount) }}</p>
         <p class="truncate text-sm text-muted-foreground">{{ c.description }}</p>
-        <p v-if="c.can_renew" class="text-xs font-medium text-warning">Código expirado · toque para gerar um novo</p>
+        <p v-if="c.due_date" :class="['text-xs', c.overdue ? 'font-medium text-destructive' : 'text-muted-foreground']">{{ c.overdue ? 'Venceu em' : 'Vence em' }} {{ formatDate(c.due_date) }}</p>
         <p v-else-if="c.created_at" class="text-xs text-muted-foreground">Enviada em {{ formatDate(c.created_at) }}</p>
       </div>
       <Button class="h-11 shrink-0" @click="token = c.token">Pagar com Pix</Button>
