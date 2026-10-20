@@ -50,12 +50,12 @@ const plan = computed(() => {
   const price = p.price_session ? `${privacy.money(p.price_session)} por sessão` : 'sem valor da sessão'
   if (p.payment_type === 'mensal') return { label: 'Mensal', detail: `${price} · vence todo dia ${p.payment_day ?? '— (defina o dia)'}` }
   if (p.payment_type === 'quinzenal') {
-    const d = p.payment_day ? ((p.payment_day - 1) % 15) + 1 : null
-    return { label: 'Quinzenal', detail: `${price} · vence nos dias ${d ? `${d} e ${d + 15}` : '— (defina o dia)'}` }
+    const first = p.first_session_at ? formatDate(p.first_session_at, 'dd/MM/yyyy') : 'primeira sessão da agenda'
+    return { label: 'Quinzenal', detail: `${price} · a cada 14 dias desde ${first}, vence no dia da sessão` }
   }
   return { label: 'Por sessão', detail: `${price} · cada sessão vence no dia do atendimento` }
 })
-const missing = computed(() => !Number(props.patient.price_session) || (props.patient.payment_type !== 'por_sessao' && !props.patient.payment_day))
+const missing = computed(() => !Number(props.patient.price_session) || (props.patient.payment_type === 'mensal' && !props.patient.payment_day))
 
 // diálogos
 const pixOpen = ref(false)

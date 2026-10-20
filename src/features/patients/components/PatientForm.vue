@@ -124,7 +124,7 @@ watch(
               </SelectContent>
             </Select>
           </FormField>
-          <FormField v-if="form.payment_type !== 'por_sessao'" label="Dia de pagamento" :hint="form.payment_type === 'quinzenal' ? 'Duas cobranças: neste dia e 15 dias depois' : 'A mensalidade vence neste dia'">
+          <FormField v-if="form.payment_type === 'mensal'" label="Dia de pagamento" hint="A mensalidade vence neste dia">
             <Select :model-value="form.payment_day ? String(form.payment_day) : undefined" @update:model-value="(v) => (form.payment_day = v ? Number(v) : null)">
               <SelectTrigger class="w-full"><SelectValue placeholder="Escolha o dia" /></SelectTrigger>
               <SelectContent>

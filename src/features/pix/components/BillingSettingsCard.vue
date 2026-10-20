@@ -35,7 +35,7 @@ async function disable() {
       <ul class="grid gap-2 text-sm text-muted-foreground sm:grid-cols-3">
         <li class="rounded-lg border p-3"><strong class="block text-foreground">Por sessão</strong>Uma cobrança por sessão do mês, vencendo no dia do atendimento.</li>
         <li class="rounded-lg border p-3"><strong class="block text-foreground">Mensal</strong>Uma por mês (sessões do mês × valor), no dia escolhido pelo paciente.</li>
-        <li class="rounded-lg border p-3"><strong class="block text-foreground">Quinzenal</strong>Duas por mês, uma para cada quinzena.</li>
+        <li class="rounded-lg border p-3"><strong class="block text-foreground">Quinzenal</strong>A cada 14 dias a partir da 1ª sessão, vencendo no dia da sessão.</li>
       </ul>
       <p class="text-xs text-muted-foreground">Cada mês é gerado quando chega. Sessões novas, remarcadas ou canceladas atualizam as cobranças em aberto; as pagas ou editadas à mão não mudam.</p>
 
@@ -63,7 +63,7 @@ async function disable() {
           <AlertTriangle class="mt-0.5 size-3.5 shrink-0" />
           <span>
             <template v-if="settings.data.value.patients_without_price">{{ settings.data.value.patients_without_price }} paciente(s) ativo(s) sem valor da sessão não terão cobrança. </template>
-            <template v-if="settings.data.value.monthly_without_day">{{ settings.data.value.monthly_without_day }} paciente(s) mensal/quinzenal sem dia de pagamento: usaremos o dia 10.</template>
+            <template v-if="settings.data.value.monthly_without_day">{{ settings.data.value.monthly_without_day }} paciente(s) mensal sem dia de pagamento: usaremos o dia 10.</template>
           </span>
         </p>
       </template>
