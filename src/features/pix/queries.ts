@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, type Ref } from 'vue'
 import { useApiMutation } from '@/shared/composables/useApiMutation'
 import { pixApi } from './api'
-import type { CreatePixChargeData, PixCharge, PublicPixCharge } from './types'
+import type { CreatePixChargeData, MercadoPagoSettingsData, MercadoPagoStatus, PixCharge, PublicPixCharge } from './types'
 
 export const pixKeys = {
   status: ['mercadopago', 'status'] as const,
@@ -71,4 +71,22 @@ export function useRenewPixCharge() {
 
 export function useMyPixCharges() {
   return useQuery({ queryKey: pixKeys.mine, queryFn: pixApi.mine, refetchInterval: 30_000 })
+}
+
+export function useSaveMercadoPagoSettings(onSaved?: () => void) {
+  const qc = useQueryClient()
+  return useApiMutation((data: MercadoPagoSettingsData) => pixApi.saveSettings(data), {
+    success: 'Credenciais do Mercado Pago salvas',
+    error: 'Não foi possível salvar',
+    onSuccess: (s: MercadoPagoStatus) => (qc.setQueryData(pixKeys.status, s), onSaved?.()),
+  })
+}
+
+export function useDeleteMercadoPagoSettings() {
+  const qc = useQueryClient()
+  return useApiMutation(() => pixApi.deleteSettings(), {
+    success: 'Credenciais removidas',
+    error: 'Não foi possível remover',
+    onSuccess: (s: MercadoPagoStatus) => qc.setQueryData(pixKeys.status, s),
+  })
 }

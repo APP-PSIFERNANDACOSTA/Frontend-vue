@@ -45,7 +45,12 @@ export interface CreatePixChargeData {
 
 export interface MercadoPagoStatus {
   configured: boolean
+  /** de onde vêm as credenciais: painel (Integrações) ou .env do servidor */
+  source: 'panel' | 'env' | null
   sandbox: boolean
+  /** token mascarado, ex. "APP_USR-1116…6906" */
+  access_token_hint: string | null
+  public_key: string | null
   webhook_url: string | null
   webhook_signature: boolean
   account: { id: number | null; nickname: string | null; email: string | null; name: string | null } | null
@@ -70,3 +75,10 @@ export interface PublicPixCharge {
 
 /** Campos que o painel de pagamento precisa (serve para as duas formas acima). */
 export type PayableCharge = Pick<PublicPixCharge, 'amount' | 'description' | 'status' | 'qr_code' | 'expires_at' | 'paid_at' | 'can_renew'> & { qr_code_base64?: string | null }
+
+export interface MercadoPagoSettingsData {
+  access_token?: string
+  public_key?: string
+  /** "" remove */
+  webhook_secret?: string
+}
