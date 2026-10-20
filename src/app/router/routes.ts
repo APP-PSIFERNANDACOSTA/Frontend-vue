@@ -103,6 +103,7 @@ export const routes: RouteRecordRaw[] = [
       { path: '', component: () => import('@/features/auth/views/LoginView.vue'), meta: { guestOnly: true, title: 'Entrar' } },
       page('/contract/success', 'Contrato assinado', () => import('@/features/contracts/views/ContractSuccessView.vue')),
       page('/contract/:token', 'Assinatura de contrato', () => import('@/features/contracts/views/ContractSignView.vue')),
+      page('/pagamento/:token', 'Pagamento Pix', () => import('@/features/pix/views/PixPayView.vue')),
     ],
   },
   {

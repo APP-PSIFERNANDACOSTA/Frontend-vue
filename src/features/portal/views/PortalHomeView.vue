@@ -4,6 +4,7 @@ import { Heart } from '@lucide/vue'
 import { useQueryClient } from '@tanstack/vue-query'
 import { useAuthStore } from '@/features/auth/store'
 import PushPromptBanner from '@/features/notifications/components/PushPromptBanner.vue'
+import PendingPixBanner from '@/features/pix/components/PendingPixBanner.vue'
 import PullToRefresh from '@/shared/components/PullToRefresh.vue'
 import { firstName } from '@/shared/lib/format'
 import MyMoodCalendar from '@/features/mood/components/MyMoodCalendar.vue'
@@ -32,6 +33,7 @@ const refresh = () => qc.invalidateQueries()
       </section>
 
       <PushPromptBanner />
+      <PendingPixBanner />
       <NextSessionCard />
       <MyMoodCalendar v-if="MOOD_ENABLED" />
       <PsiMessageCard />

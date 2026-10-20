@@ -3,6 +3,11 @@ export type PixChargeStatus = 'pending' | 'paid' | 'expired' | 'cancelled' | 're
 export interface PixCharge {
   id: number
   uuid: string
+  /** token do link público /pagamento/{token} */
+  token: string
+  public_url: string
+  /** QR venceu sem pagamento: dá para gerar outro na mesma cobrança */
+  can_renew: boolean
   psychologist_id: number
   patient_id: number | null
   payment_id: number | null
@@ -46,3 +51,22 @@ export interface MercadoPagoStatus {
   account: { id: number | null; nickname: string | null; email: string | null; name: string | null } | null
   error: string | null
 }
+
+/** O que o link público e o portal recebem (só o necessário para pagar). */
+export interface PublicPixCharge {
+  token: string
+  amount: string
+  description: string
+  status: PixChargeStatus
+  qr_code: string | null
+  qr_code_base64: string | null
+  expires_at: string | null
+  paid_at: string | null
+  created_at: string | null
+  can_renew: boolean
+  patient_first_name: string | null
+  psychologist: { name: string | null; crp: string | null }
+}
+
+/** Campos que o painel de pagamento precisa (serve para as duas formas acima). */
+export type PayableCharge = Pick<PublicPixCharge, 'amount' | 'description' | 'status' | 'qr_code' | 'expires_at' | 'paid_at' | 'can_renew'> & { qr_code_base64?: string | null }

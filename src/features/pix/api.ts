@@ -1,5 +1,5 @@
 import apiClient from '@/shared/lib/api-client'
-import type { CreatePixChargeData, MercadoPagoStatus, PixCharge, PixChargeStatus } from './types'
+import type { CreatePixChargeData, MercadoPagoStatus, PixCharge, PixChargeStatus, PublicPixCharge } from './types'
 
 interface Page<T> { data: T[]; current_page: number; last_page: number; total: number }
 
@@ -9,4 +9,12 @@ export const pixApi = {
   get: async (id: number) => (await apiClient.get<{ data: PixCharge }>(`/pix-charges/${id}`)).data,
   create: async (data: CreatePixChargeData) => (await apiClient.post<{ data: PixCharge }>('/pix-charges', data)).data,
   cancel: async (id: number) => (await apiClient.post<{ data: PixCharge }>(`/pix-charges/${id}/cancel`)).data,
+
+  // link público (sem login) e portal do paciente
+  publicGet: async (token: string) => (await apiClient.get<{ data: PublicPixCharge }>(`/public/pix/${token}`)).data,
+  publicRenew: async (token: string) => (await apiClient.post<{ data: PublicPixCharge }>(`/public/pix/${token}/renew`)).data,
+  mine: async () => (await apiClient.get<{ data: PublicPixCharge[] }>('/patient/pix-charges')).data,
 }
+
+/** Link que a psicóloga envia (usa o domínio onde o app está aberto). */
+export const pixPaymentLink = (token: string) => `${window.location.origin}/pagamento/${token}`

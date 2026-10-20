@@ -6,6 +6,7 @@ import { computed, ref } from 'vue'
 import { useDownloadMyHealthReceipt, useDownloadMyReceipt, useMyPayments } from '@/features/payments/queries'
 import { PAYMENT_METHOD_LABELS } from '@/features/payments/types'
 import { useMySessions } from '@/features/sessions/queries'
+import MyPixCharges from '@/features/pix/components/MyPixCharges.vue'
 import EmptyState from '@/shared/components/EmptyState.vue'
 import QueryState from '@/shared/components/QueryState.vue'
 import SectionCard from '@/shared/components/SectionCard.vue'
@@ -37,6 +38,8 @@ const doneSessions = computed(() => (sessions.data.value ?? []).filter((s) => s.
 <template>
   <div class="space-y-4">
     <p class="text-sm text-muted-foreground">Acompanhe seus pagamentos e recibos</p>
+
+    <MyPixCharges />
 
     <div class="grid grid-cols-2 gap-3">
       <StatCard label="Sessões feitas" :value="doneSessions" :icon="Calendar" :loading="sessions.isPending.value" />

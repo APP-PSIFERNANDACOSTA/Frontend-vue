@@ -2,12 +2,14 @@ import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, type Ref } from 'vue'
 import { useApiMutation } from '@/shared/composables/useApiMutation'
 import { pixApi } from './api'
-import type { CreatePixChargeData, PixCharge } from './types'
+import type { CreatePixChargeData, PixCharge, PublicPixCharge } from './types'
 
 export const pixKeys = {
   status: ['mercadopago', 'status'] as const,
   all: ['pix-charges'] as const,
   one: (id: number) => ['pix-charges', id] as const,
+  public: (token: string) => ['pix-public', token] as const,
+  mine: ['pix-charges', 'mine'] as const,
 }
 
 export function useMercadoPagoStatus() {
@@ -42,4 +44,31 @@ export function useCancelPixCharge() {
     invalidate: [pixKeys.all],
     onSuccess: (c) => qc.setQueryData(pixKeys.one(c.id), c),
   })
+}
+
+/** Link público / portal: acompanha pelo token (consulta a cada 5 s enquanto pendente). */
+export function usePublicPixCharge(token: Ref<string | null>) {
+  return useQuery({
+    queryKey: computed(() => pixKeys.public(token.value ?? '')),
+    queryFn: () => pixApi.publicGet(token.value!),
+    enabled: computed(() => !!token.value),
+    retry: (n, e: any) => e?.response?.status !== 404 && n < 2,
+    refetchInterval: (q) => (q.state.data?.status === 'pending' ? 5_000 : false),
+    refetchIntervalInBackground: true,
+  })
+}
+
+export function useRenewPixCharge() {
+  const qc = useQueryClient()
+  return useApiMutation((token: string) => pixApi.publicRenew(token), {
+    error: 'Não foi possível gerar um novo Pix',
+    onSuccess: (c: PublicPixCharge) => {
+      qc.setQueryData(pixKeys.public(c.token), c)
+      qc.invalidateQueries({ queryKey: pixKeys.mine })
+    },
+  })
+}
+
+export function useMyPixCharges() {
+  return useQuery({ queryKey: pixKeys.mine, queryFn: pixApi.mine, refetchInterval: 30_000 })
 }

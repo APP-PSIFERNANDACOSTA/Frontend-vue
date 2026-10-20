@@ -17,9 +17,9 @@ import { Textarea } from '@/shared/ui/textarea'
 import { useNotificationTemplates, useSaveRules, useSaveTemplates, useSessionRules } from '../queries'
 import type { NotificationTemplate, SessionReminderRule } from '../templates.api'
 
-const TYPE_LABELS: Record<string, string> = { message_new: 'Nova mensagem', quiz_assigned: 'Quiz atribuído', quiz_updated: 'Quiz atualizado', quiz_response: 'Resposta de quiz', diary_new: 'Novo diário', post_therapy_note: 'Pós-terapia (nova nota)', push_test: 'Notificação de teste', mood_alert: 'Atenção ao humor' }
-const RECIPIENT: Record<string, 'patient' | 'psychologist'> = { message_new: 'patient', quiz_assigned: 'patient', quiz_updated: 'patient', quiz_response: 'psychologist', diary_new: 'psychologist', post_therapy_note: 'patient', push_test: 'psychologist', mood_alert: 'psychologist' }
-const PLACEHOLDERS: Record<string, string[]> = { message_new: ['{message_title}'], quiz_assigned: ['{quiz_title}'], quiz_updated: ['{quiz_title}'], quiz_response: ['{patient_name}', '{quiz_title}'], diary_new: ['{patient_name}'], post_therapy_note: ['{note_title}', '{patient_name}'], push_test: [], mood_alert: ['{patient_name}', '{reason}'] }
+const TYPE_LABELS: Record<string, string> = { message_new: 'Nova mensagem', quiz_assigned: 'Quiz atribuído', quiz_updated: 'Quiz atualizado', quiz_response: 'Resposta de quiz', diary_new: 'Novo diário', post_therapy_note: 'Pós-terapia (nova nota)', push_test: 'Notificação de teste', mood_alert: 'Atenção ao humor', pix_paid: 'Pix recebido' }
+const RECIPIENT: Record<string, 'patient' | 'psychologist'> = { message_new: 'patient', quiz_assigned: 'patient', quiz_updated: 'patient', quiz_response: 'psychologist', diary_new: 'psychologist', post_therapy_note: 'patient', push_test: 'psychologist', mood_alert: 'psychologist', pix_paid: 'psychologist' }
+const PLACEHOLDERS: Record<string, string[]> = { message_new: ['{message_title}'], quiz_assigned: ['{quiz_title}'], quiz_updated: ['{quiz_title}'], quiz_response: ['{patient_name}', '{quiz_title}'], diary_new: ['{patient_name}'], post_therapy_note: ['{note_title}', '{patient_name}'], push_test: [], mood_alert: ['{patient_name}', '{reason}'], pix_paid: ['{patient_name}', '{amount}', '{description}'] }
 const SESSION_PLACEHOLDERS = ['{date}', '{time}', '{datetime}']
 const OFFSETS = [[30, '30 minutos antes'], [60, '1 hora antes'], [120, '2 horas antes'], [180, '3 horas antes'], [360, '6 horas antes'], [720, '12 horas antes'], [1440, '1 dia antes (24h)'], [2880, '2 dias antes']] as const
 

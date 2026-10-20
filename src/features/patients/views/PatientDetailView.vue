@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { BookOpen, Calendar, Edit, File, FileText, NotebookPen } from '@lucide/vue'
+import { BookOpen, Calendar, Edit, File, FileText, NotebookPen, QrCode } from '@lucide/vue'
 import { computed } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import PatientNotesTab from '@/features/notes/components/PatientNotesTab.vue'
 import PatientDiaryTab from '@/features/diary/components/PatientDiaryTab.vue'
 import PatientSessionsTab from '@/features/sessions/components/PatientSessionsTab.vue'
 import PatientContractsTab from '@/features/contracts/components/PatientContractsTab.vue'
+import PatientChargesTab from '@/features/pix/components/PatientChargesTab.vue'
 import ErrorState from '@/shared/components/ErrorState.vue'
 import LoadingState from '@/shared/components/LoadingState.vue'
 import PageHeader from '@/shared/components/PageHeader.vue'
@@ -23,6 +24,7 @@ const TABS = [
   { value: 'sessions', label: 'Sessões', icon: Calendar },
   { value: 'notes', label: 'Anotações', short: 'Notas', icon: NotebookPen },
   { value: 'contracts', label: 'Contratos', icon: File },
+  { value: 'charges', label: 'Cobranças', icon: QrCode },
 ] as const
 
 const route = useRoute()
@@ -77,6 +79,7 @@ const tab = computed({
       <TabsContent value="contracts">
         <PatientContractsTab :patient-id="id" :patient-name="patient.data.value.name" :active="tab === 'contracts'" />
       </TabsContent>
+      <TabsContent value="charges"><PatientChargesTab :patient="patient.data.value" /></TabsContent>
     </Tabs>
   </div>
 </template>
