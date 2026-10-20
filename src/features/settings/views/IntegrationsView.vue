@@ -2,6 +2,7 @@
 import { Calendar, CheckCircle2, Loader2, XCircle } from '@lucide/vue'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import MercadoPagoIntegrationCard from '@/features/pix/components/MercadoPagoIntegrationCard.vue'
 import PageHeader from '@/shared/components/PageHeader.vue'
 import SectionCard from '@/shared/components/SectionCard.vue'
 import { useConfirm } from '@/shared/composables/useConfirm'
@@ -70,5 +71,7 @@ async function remove() {
         <p class="border-t pt-4 text-xs text-muted-foreground">Você será redirecionada ao Google para autorizar o acesso. O sistema precisa de permissão para criar, editar e excluir eventos em seu nome.</p>
       </div>
     </SectionCard>
+
+    <MercadoPagoIntegrationCard />
   </div>
 </template>
