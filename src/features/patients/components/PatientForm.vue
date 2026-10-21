@@ -128,7 +128,7 @@ watch(
             <Select :model-value="form.payment_day ? String(form.payment_day) : undefined" @update:model-value="(v) => (form.payment_day = v ? Number(v) : null)">
               <SelectTrigger class="w-full"><SelectValue placeholder="Escolha o dia" /></SelectTrigger>
               <SelectContent>
-                <SelectItem v-for="d in [5, 10, 15, 20]" :key="d" :value="String(d)">Todo dia {{ d }}</SelectItem>
+                <SelectItem v-for="d in [5, 10, 15, 20, 25]" :key="d" :value="String(d)">Todo dia {{ d }}</SelectItem>
               </SelectContent>
             </Select>
           </FormField>
