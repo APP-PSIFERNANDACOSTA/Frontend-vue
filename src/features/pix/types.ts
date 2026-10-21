@@ -117,6 +117,11 @@ export type ManualPaymentMethod = 'pix' | 'credit_card' | 'boleto'
 
 export interface BillingToggleResult {
   data: BillingSettings
-  /** só ao ligar: o que a análise da agenda gerou agora */
-  summary: { patients: number; generated_count: number; generated_total: number } | null
+  /** ligar: o que a análise da agenda gerou · desligar: o que foi removido */
+  summary: {
+    patients?: number
+    generated_count?: number
+    generated_total?: number
+    removed?: { deleted: number; cancelled: number; paid: number; total: number }
+  } | null
 }

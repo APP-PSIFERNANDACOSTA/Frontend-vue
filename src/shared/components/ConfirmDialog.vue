@@ -16,10 +16,17 @@ import { useConfirmStore } from '@/shared/composables/useConfirm'
 
 const store = useConfirmStore()
 const { open, options } = storeToRefs(store)
+
+// fechou sem confirmar (Esc, clique fora, Cancelar) = "não" — adiado para o @click do Confirmar resolver primeiro
+function onOpenChange(v: boolean) {
+  if (!v) setTimeout(() => store.resolve(false))
+}
 </script>
 
 <template>
-  <AlertDialog :open="open" @update:open="(v) => !v && store.resolve(false)">
+  <!-- fechar (Esc/fora/Cancelar) = "não". Adiado: o botão de confirmar fecha o diálogo ANTES do próprio @click;
+       sem o adiamento, o "não" do fechamento chegava primeiro e toda confirmação virava recusa. -->
+  <AlertDialog :open="open" @update:open="onOpenChange">
     <AlertDialogContent>
       <AlertDialogHeader>
         <AlertDialogTitle>{{ options.title }}</AlertDialogTitle>

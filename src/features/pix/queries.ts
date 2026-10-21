@@ -117,9 +117,15 @@ export function useSaveBillingSettings() {
     invalidate: [pixKeys.all],
     onSuccess: (r: BillingToggleResult) => {
       qc.setQueryData(pixKeys.billing, r.data)
-      if (!r.data.enabled) return notify.info('Cobranças automáticas desligadas', 'Nenhuma cobrança nova será gerada. As que já existem continuam valendo.')
+      if (!r.data.enabled) {
+        const rm = r.summary?.removed
+        const n = (rm?.deleted ?? 0) + (rm?.cancelled ?? 0)
+        return notify.info('Cobranças automáticas desligadas', n
+          ? `${n} cobrança${n > 1 ? 's' : ''} automática${n > 1 ? 's' : ''} em aberto removida${n > 1 ? 's' : ''} (${formatMoney(rm?.total ?? 0)}). Ficaram só as avulsas e as pagas.`
+          : 'Não havia cobranças automáticas em aberto. Ficaram só as avulsas e as pagas.')
+      }
       const s = r.summary
-      notify.success('Cobranças automáticas ligadas', s?.generated_count
+      notify.success('Cobranças automáticas ligadas', s?.generated_count && s.generated_total != null
         ? `Agenda analisada: ${s.generated_count} cobrança${s.generated_count > 1 ? 's' : ''} gerada${s.generated_count > 1 ? 's' : ''} (${formatMoney(s.generated_total)}).`
         : 'Agenda analisada: nenhuma cobrança nova para gerar agora.')
     },
