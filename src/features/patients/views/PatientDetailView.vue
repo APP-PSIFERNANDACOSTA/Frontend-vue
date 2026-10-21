@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BookOpen, Calendar, CircleDollarSign, Edit, File, FileText, NotebookPen } from '@lucide/vue'
+import { BookOpen, Calendar, CircleDollarSign, Edit, File, FileText, Loader2, NotebookPen, RotateCcw, UserX } from '@lucide/vue'
 import { computed } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import PatientNotesTab from '@/features/notes/components/PatientNotesTab.vue'
@@ -16,7 +16,7 @@ import { Button } from '@/shared/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs'
 import PatientInfoTab from '../components/PatientInfoTab.vue'
 import { PATIENT_STATUS_MAP } from '../constants'
-import { usePatient } from '../queries'
+import { usePatient, useReactivatePatient } from '../queries'
 
 const TABS = [
   { value: 'info', label: 'Informações', short: 'Info', icon: FileText },
@@ -32,6 +32,7 @@ const router = useRouter()
 const privacy = usePrivacyMode()
 const id = computed(() => Number(route.params.id))
 const patient = usePatient(id)
+const reactivate = useReactivatePatient()
 
 // Aba ativa vive na URL (?tab=) — links de notificação continuam funcionando
 const tab = computed({
@@ -56,6 +57,15 @@ const tab = computed({
         <Button variant="outline" as-child><RouterLink :to="`/dashboard/patients/${id}/edit`"><Edit /> Editar</RouterLink></Button>
       </template>
     </PageHeader>
+
+    <div v-if="patient.data.value.status === 'inactive'" class="flex flex-wrap items-center gap-3 rounded-xl border border-warning/30 bg-warning/10 p-4">
+      <UserX class="size-5 shrink-0 text-warning" />
+      <div class="min-w-0 flex-1">
+        <p class="font-medium">Paciente inativo</p>
+        <p class="text-sm text-muted-foreground">Não aparece na agenda nem nas listas de pacientes ativos e não recebe cobranças automáticas.</p>
+      </div>
+      <Button :disabled="reactivate.isPending.value" @click="reactivate.mutate(id)"><Loader2 v-if="reactivate.isPending.value" class="animate-spin" /><RotateCcw v-else /> Reativar paciente</Button>
+    </div>
 
     <Tabs v-model="tab" class="space-y-4">
       <div class="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">

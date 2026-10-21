@@ -86,3 +86,12 @@ export function useUpcomingBirthdays(days: MaybeRefOrGetter<number>) {
     placeholderData: keepPreviousData,
   })
 }
+
+/** Reativa um paciente inativo (volta para as listas, agenda e cobranças). */
+export function useReactivatePatient() {
+  return useApiMutation((id: number) => patientService.update(id, { status: 'active' }), {
+    success: 'Paciente reativado!',
+    error: 'Erro ao reativar paciente',
+    invalidate: [patientKeys.all],
+  })
+}
