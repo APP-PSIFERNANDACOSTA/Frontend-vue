@@ -1,5 +1,5 @@
 import apiClient from '@/shared/lib/api-client'
-import type { BillingSettings, CreatePixChargeData, ManualPaymentMethod, MercadoPagoSettingsData, MercadoPagoStatus, PixCharge, PixChargeStatus, PublicPixCharge } from './types'
+import type { BillingSettings, BillingToggleResult, CreatePixChargeData, ManualPaymentMethod, MercadoPagoSettingsData, MercadoPagoStatus, PixCharge, PixChargeStatus, PublicPixCharge } from './types'
 
 interface Page<T> { data: T[]; current_page: number; last_page: number; total: number }
 
@@ -15,7 +15,7 @@ export const pixApi = {
   markPaid: async (id: number, data: { payment_method: ManualPaymentMethod; payment_date: string }) => (await apiClient.post<{ data: PixCharge }>(`/pix-charges/${id}/mark-paid`, data)).data,
 
   billingSettings: () => apiClient.get<BillingSettings>('/billing/settings'),
-  saveBillingSettings: async (data: { enabled: boolean; start?: 'today' | 'next_month' }) => (await apiClient.put<{ data: BillingSettings }>('/billing/settings', data)).data,
+  saveBillingSettings: (data: { enabled: boolean; start?: 'today' | 'next_month' }) => apiClient.put<BillingToggleResult>('/billing/settings', data),
 
   // link público (sem login) e portal do paciente
   publicGet: async (token: string) => (await apiClient.get<{ data: PublicPixCharge }>(`/public/pix/${token}`)).data,

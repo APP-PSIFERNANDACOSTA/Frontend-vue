@@ -74,7 +74,7 @@ async function removeCredentials() {
 
         <!-- webhook -->
         <div class="space-y-1.5">
-          <p class="text-sm font-medium">URL do webhook (evento: Pagamentos)</p>
+          <p class="text-sm font-medium">URL do webhook (evento: Order (Mercado Pago))</p>
           <div v-if="s.webhook_url" class="flex gap-2">
             <code class="min-w-0 flex-1 truncate rounded-md border bg-muted/40 px-3 py-2 text-xs">{{ s.webhook_url }}</code>
             <Button variant="outline" size="icon" aria-label="Copiar URL do webhook" @click="copy(s.webhook_url!, 'URL copiada!', 'Cole em Suas integrações → Webhooks')"><Copy /></Button>

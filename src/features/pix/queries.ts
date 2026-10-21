@@ -1,8 +1,10 @@
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, type Ref } from 'vue'
 import { useApiMutation } from '@/shared/composables/useApiMutation'
+import { formatMoney } from '@/shared/lib/format'
+import { notify } from '@/shared/lib/toast'
 import { pixApi } from './api'
-import type { CreatePixChargeData, ManualPaymentMethod, MercadoPagoSettingsData, MercadoPagoStatus, PixCharge, PublicPixCharge } from './types'
+import type { BillingToggleResult, CreatePixChargeData, ManualPaymentMethod, MercadoPagoSettingsData, MercadoPagoStatus, PixCharge, PublicPixCharge } from './types'
 
 export const pixKeys = {
   status: ['mercadopago', 'status'] as const,
@@ -109,8 +111,17 @@ export function useBillingSettings() {
 }
 
 export function useSaveBillingSettings() {
+  const qc = useQueryClient()
   return useApiMutation((data: { enabled: boolean; start?: 'today' | 'next_month' }) => pixApi.saveBillingSettings(data), {
-    success: (s) => (s.enabled ? 'Cobranças automáticas ligadas' : 'Cobranças automáticas desligadas'),
-    error: 'Não foi possível salvar', invalidate: [pixKeys.billing, pixKeys.all],
+    error: 'Não foi possível salvar',
+    invalidate: [pixKeys.all],
+    onSuccess: (r: BillingToggleResult) => {
+      qc.setQueryData(pixKeys.billing, r.data)
+      if (!r.data.enabled) return notify.info('Cobranças automáticas desligadas', 'Nenhuma cobrança nova será gerada. As que já existem continuam valendo.')
+      const s = r.summary
+      notify.success('Cobranças automáticas ligadas', s?.generated_count
+        ? `Agenda analisada: ${s.generated_count} cobrança${s.generated_count > 1 ? 's' : ''} gerada${s.generated_count > 1 ? 's' : ''} (${formatMoney(s.generated_total)}).`
+        : 'Agenda analisada: nenhuma cobrança nova para gerar agora.')
+    },
   })
 }
